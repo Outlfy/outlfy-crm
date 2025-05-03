@@ -1,0 +1,27 @@
+{
+    "name": "outlfy/outlfy",
+    "description": "outlfy",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Webkul",
+            "email": "example@webkul.com"
+        }
+    ],
+    "require": {
+    },
+    "autoload": {
+        "psr-4": {
+            "Webkul\\Outlfy\\Webkul\\Outlfy\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Webkul\\Webkul\\Outlfy\\Providers\\Webkul\\OutlfyServiceProvider"
+            ],
+            "aliases": {}
+        }
+    },
+    "minimum-stability": "dev"
+}
