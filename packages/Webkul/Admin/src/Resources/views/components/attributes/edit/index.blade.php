@@ -50,14 +50,14 @@
         />
 
         @break
-    
+
     @case('multiselect')
         <x-admin::attributes.edit.multiselect
             :attribute="$attribute"
             :value="$value"
             :validations="$validations"
         />
-        
+
         @break
 
     @case('price')
@@ -134,6 +134,15 @@
 
     @case('checkbox')
         <x-admin::attributes.edit.checkbox
+            :attribute="$attribute"
+            :value="$value"
+            :validations="$validations"
+        />
+
+        @break
+
+    @case('socials')
+        <x-admin::attributes.edit.socials
             :attribute="$attribute"
             :value="$value"
             :validations="$validations"

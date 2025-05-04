@@ -67,4 +67,10 @@ class Bouncer
 
         return null;
     }
+
+    public function isAdmin() {
+        $user = auth()->guard('user')->user();
+
+        return $user->role->permission_type == 'all';
+    }
 }

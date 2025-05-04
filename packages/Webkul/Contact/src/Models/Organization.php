@@ -13,6 +13,7 @@ class Organization extends Model implements OrganizationContract
 
     protected $casts = [
         'address' => 'array',
+        'socials' => 'array'
     ];
 
     /**
@@ -24,6 +25,8 @@ class Organization extends Model implements OrganizationContract
         'name',
         'address',
         'user_id',
+        'description',
+        'socials',
     ];
 
     /**

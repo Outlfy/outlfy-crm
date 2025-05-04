@@ -1866,6 +1866,9 @@ return [
             'update-contact-title' => 'Update Contact Numbers',
             'update-emails-title'  => 'Update Contact Emails',
             'work'                 => 'Work',
+            'linkedin'             => 'Linkedin',
+            'website'              => 'Website',
+            'other'                => 'Other'
         ],
     ],
 

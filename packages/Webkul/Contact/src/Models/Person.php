@@ -38,6 +38,7 @@ class Person extends Model implements PersonContract
     protected $casts = [
         'emails'          => 'array',
         'contact_numbers' => 'array',
+        'socials'         => 'array',
     ];
 
     /**
@@ -53,6 +54,8 @@ class Person extends Model implements PersonContract
         'user_id',
         'organization_id',
         'unique_id',
+        'description',
+        'socials',
     ];
 
     /**

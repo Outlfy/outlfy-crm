@@ -26,6 +26,7 @@ trait CustomAttribute
         'date'        => 'date_value',
         'file'        => 'text_value',
         'image'       => 'text_value',
+        'socials'     => 'json_value',
     ];
 
     /**

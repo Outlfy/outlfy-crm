@@ -7,6 +7,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\View\View;
 use Prettus\Repository\Criteria\RequestCriteria;
@@ -29,6 +30,7 @@ use Webkul\Lead\Repositories\TypeRepository;
 use Webkul\Lead\Services\MagicAIService;
 use Webkul\Tag\Repositories\TagRepository;
 use Webkul\User\Repositories\UserRepository;
+use Webkul\Warehouse\Repositories\WarehouseRepository;
 
 class LeadController extends Controller
 {
@@ -51,7 +53,8 @@ class LeadController extends Controller
         protected StageRepository $stageRepository,
         protected LeadRepository $leadRepository,
         protected ProductRepository $productRepository,
-        protected PersonRepository $personRepository
+        protected PersonRepository $personRepository,
+        protected WarehouseRepository $warehouseRepository
     ) {
         request()->request->add(['entity_type' => 'leads']);
     }
@@ -147,7 +150,15 @@ class LeadController extends Controller
      */
     public function create(): View
     {
-        return view('admin::leads.create');
+        $isAdmin = bouncer()->isAdmin();
+        $org = bouncer()->getUserOrganisation();
+        $orgs = null;
+
+        if (!$org && $isAdmin) {
+            $orgs = $this->warehouseRepository->all();
+        }
+
+        return view('admin::leads.create', compact('isAdmin', 'org', 'orgs'));
     }
 
     /**
@@ -158,6 +169,10 @@ class LeadController extends Controller
         Event::dispatch('lead.create.before');
 
         $data = $request->all();
+
+        if (!isset($data['lead_organisation'])) {
+            $data['lead_organisation'] = bouncer()->getUserOrganisation();
+        }
 
         $data['status'] = 1;
 
@@ -184,6 +199,8 @@ class LeadController extends Controller
         Event::dispatch('lead.create.after', $lead);
 
         session()->flash('success', trans('admin::app.leads.create-success'));
+
+
 
         return redirect()->route('admin.leads.index', $data['lead_pipeline_id']);
     }
@@ -712,5 +729,16 @@ class LeadController extends Controller
         }
 
         return $leads;
+    }
+
+    protected function scrapeLeadInfo($name) {
+        $url = 'http://localhost:5000/api/search/name';
+
+        $response = Http::post($url, [
+            'name' => $name,
+            "type" => "auto"
+        ]);
+
+        dd($response->json());
     }
 }

@@ -23,12 +23,16 @@ return [
                 'name'            => 'Name',
                 'organization'    => 'Organization',
                 'sales-owner'     => 'Sales Owner',
+                'description'     => 'Description',
+                'socials'         => 'Socials',
             ],
 
             'organizations' => [
                 'address'     => 'Address',
                 'name'        => 'Name',
                 'sales-owner' => 'Sales Owner',
+                'description' => 'Description',
+                'socials'     => 'Socials',
             ],
 
             'products' => [

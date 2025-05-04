@@ -48,6 +48,7 @@ class AttributeValue extends Model implements AttributeValueContract
         'date'        => 'date_value',
         'file'        => 'text_value',
         'image'       => 'text_value',
+        'socials'     => 'json_value',
     ];
 
     /**
