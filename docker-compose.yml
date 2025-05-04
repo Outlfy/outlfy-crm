@@ -1,0 +1,60 @@
+services:
+  # PHP Application Service
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: outlfy-crm-app
+    restart: unless-stopped
+    working_dir: /var/www
+    volumes:
+      - .:/var/www # Map local code to container
+      - ./env.temp:/var/www/.env # Map env file with correct permissions
+    networks:
+      - outlfy-crm-network
+    depends_on:
+      - db # Wait for db to be ready (optional but good practice)
+
+  # Nginx Web Server Service
+  web:
+    image: nginx:alpine
+    container_name: outlfy-crm-web
+    restart: unless-stopped
+    ports:
+      - "8000:80" # Map host port 8000 to container port 80
+    volumes:
+      - .:/var/www # Share code for static assets
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf # Link nginx config
+    networks:
+      - outlfy-crm-network
+    depends_on:
+      - app
+
+  # MySQL Database Service
+  db:
+    image: mysql:8.0
+    container_name: outlfy-crm-db
+    restart: unless-stopped
+    ports:
+      # Optionally expose MySQL port to host (e.g., for GUI tool access)
+      # Be cautious with exposing DB ports in production
+      - "33061:3306"
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE:-outlfy_crm}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-secret} # Use root password from .env or default
+      MYSQL_PASSWORD: ${DB_PASSWORD:-secret}      # Use user password from .env or default
+      MYSQL_USER: ${DB_USERNAME:-outlfy_user}    # Use user from .env or default
+    volumes:
+      - db-data:/var/lib/mysql # Persist database data
+    networks:
+      - outlfy-crm-network
+
+# Docker Networks
+networks:
+  outlfy-crm-network:
+    driver: bridge
+
+# Docker Volumes
+volumes:
+  db-data:
+    driver: local
